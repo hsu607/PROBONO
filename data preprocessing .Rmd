@@ -1,0 +1,414 @@
+---
+title: "Untitled"
+output: word_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## (경기도 i코드)사망자수 전처리
+```{r}
+library(dplyr)
+library(tidyr)
+death_i = read.csv("G:/내 드라이브/Colab Notebooks/(전처리완,경기도만)2018-20_사망원인i.csv")
+```
+
+```{r}
+death_i = death_i[1:601, 1:3]
+names(death_i) = c("date", "death", "old")
+death_i = death_i %>% separate(date, into = c("year", "monthday"), sep = 4) %>% separate(monthday, into = c("month", "day"), sep = 2) %>% complete(year, month, day)
+```
+
+
+```{r}
+death_i = death_i[-c(60:62,124,186,279,341,432,433,434,496,558,651,713,805,806,868,930,1023,1085),]
+death_i[is.na(death_i)] = 0
+```
+
+```{r}
+write.csv(death_i, "G:/내 드라이브/Colab Notebooks/death_i.csv", row.names = FALSE)
+```
+
+--------------------------------------------------------------------------------
+
+## (경기도 j코드)사망자수 전처리
+
+```{r}
+death_j = read.csv("G:/내 드라이브/Colab Notebooks/(전처리완,경기도만)2018-20_사망원인j.csv")
+```
+
+```{r}
+death_j = death_j[1:565, 1:3]
+names(death_j) = c("date", "death", "old")
+death_j = death_j %>% separate(date, into = c("year", "monthday"), sep = 4) %>% separate(monthday, into = c("month", "day"), sep = 2) %>% complete(year, month, day)
+```
+
+```{r}
+death_j = death_j[-c(60:62,124,186,279,341,432,433,434,496,558,651,713,805,806,868,930,1023,1085),]
+death_j[is.na(death_j)] = 0
+```
+
+```{r}
+write.csv(death_j, "G:/내 드라이브/Colab Notebooks/death_j.csv", row.names = FALSE)
+```
+--------------------------------------------------------------------------------
+
+
+## 기상데이터 전처리
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(zoo)
+weather_train = read.csv("G:/내 드라이브/Colab Notebooks/weather_train.csv")
+```
+
+```{r}
+weather_train = weather_train[1:1096,]
+weather_train = weather_train %>% separate(date, into = c("year", "month", "day"), sep = '-') %>% unite("date", "year", "month", "day", sep = "")
+
+weather_train = na.locf(weather_train) # 결측치 이전행값으로 대체
+```
+
+```{r}
+write.csv(weather_train, "G:/내 드라이브/Colab Notebooks/weather.csv", row.names = FALSE)
+```
+
+## 미세먼지 데이터 
+
+```{r}
+PM_train = read.csv("C:/Users/user/Desktop/미세먼지 데이터/PM_data_ing.csv")
+PM_train
+```
+
+
+--------------------------------------------------------------------------
+
+```{r}
+harm = read.csv("G:/내 드라이브/Colab Notebooks/harm.csv")
+death_i = read.csv("G:/내 드라이브/Colab Notebooks/death_i.csv")
+death_j = read.csv("G:/내 드라이브/Colab Notebooks/death_j.csv")
+weather_train = read.csv("G:/내 드라이브/Colab Notebooks/weather_train2.csv")
+dim(death_i)
+dim(death_j)
+dim(weather_train)
+```
+
+--------------------------------------------------------------------------------
+# 국민건강보험공단 진료내역 데이터 전처리
+## 주상병 코드 I,J(호흡기계, 심혈관계) & 시도코드 41(경기도)인 데이터만 추출 
+
+```{r}
+health_2018_1 = read.csv("C:/Users/user/Desktop/NHIS_OPEN_T20_2018_PART1.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+health_2018_2 = read.csv("C:/Users/user/Desktop/NHIS_OPEN_T20_2018_PART2.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+health_2019_1 = read.csv("C:/Users/user/Desktop/T20_2019_1백만.1.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+health_2019_2 = read.csv("C:/Users/user/Desktop/T20_2019_1백만.2.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+health_2019_3 = read.csv("C:/Users/user/Desktop/T20_2019_1백만.3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+```
+
+```{r}
+library(tidyr)
+library(dplyr)
+health_2018_1 = read.csv("C:/Users/user/Desktop/NHIS_OPEN_T20_2018_PART1.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+```
+
+```{r}
+health_2018_1 <- health_2018_1%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))
+
+health_2018_1 <- health_2018_1 %>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health_2018_1, "G:/내 드라이브/Colab Notebooks/health2018_2.csv", row.names = FALSE)
+```
+
+
+```{r}
+library(tidyr)
+library(dplyr)
+health_2018_2 = read.csv("C:/Users/user/Desktop/NHIS_OPEN_T20_2018_PART2.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+```
+
+```{r}
+health_2018_2 <- health_2018_2%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))
+
+health_2018_2 <- health_2018_2 %>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health_2018_2, "G:/내 드라이브/Colab Notebooks/health2018_2.csv", row.names = FALSE)
+```
+
+
+```{r}
+library(tidyr)
+library(dplyr)
+health_2018_3 = read.csv("C:/Users/user/Desktop/NHIS_OPEN_T20_2018_PART3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+```
+
+```{r}
+health_2018_3 <- health_2018_3%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))
+
+health_2018_3 <- health_2018_3 %>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health_2018_3, "G:/내 드라이브/Colab Notebooks/health2018_3.csv", row.names = FALSE)
+```
+
+```{r}
+library(tidyr)
+library(dplyr)
+health_2019_1 = read.csv("C:/Users/user/Desktop/T20_2019_1백만.1.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+```
+
+```{r}
+health_2019_1 <- health_2019_1%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))
+
+health_2019_1 <- health_2019_1 %>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health_2019_1, "G:/내 드라이브/Colab Notebooks/health2019_1.csv", row.names = FALSE)
+```
+
+```{r}
+library(tidyr)
+library(dplyr)
+health_2019_2 = read.csv("C:/Users/user/Desktop/T20_2019_1백만.2.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+```
+
+```{r}
+health_2019_2 <- health_2019_2%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))
+
+health_2019_2 <- health_2019_2 %>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health_2019_2, "G:/내 드라이브/Colab Notebooks/health2019_2.csv", row.names = FALSE)
+```
+
+```{r}
+library(tidyr)
+library(dplyr)
+health_2019_3 = read.csv("C:/Users/user/Desktop/T20_2019_1백만.3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+```
+
+```{r}
+health_2019_3 <- health_2019_3%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))
+
+health_2019_3 <- health_2019_3 %>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health_2019_3, "G:/내 드라이브/Colab Notebooks/health2019_3.csv", row.names = FALSE)
+```
+
+
+
+## 어린이 
+```{r}
+# 어린이만 2018년_1
+
+health2018Y_1 <- health_2018_1%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(1,2,3))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health2018Y_1, "G:/내 드라이브/Colab Notebooks/health2018Y_1.csv", row.names = FALSE)
+# 어린이만 2018년_2
+
+health2018Y_2 <- health_2018_2%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(1,2,3))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health2018Y_2, "G:/내 드라이브/Colab Notebooks/health2018Y_2.csv", row.names = FALSE)
+
+# 어린이만 2018년_3
+
+# health2018Y_3 = read.csv("G:/내 드라이브/Colab Notebooks/health2013Y_3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+
+# 어린이만 2019년_1
+health2019Y_1 <- health_2019_1%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(1,2,3))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+# 어린이만 2019년_2
+health2019Y_2 <- health_2019_2%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(1,2,3))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+# 어린이만 2019년_3
+health2019Y_3 <- health_2019_3%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(1,2,3))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+
+health2019Y = rbind(health2019Y_1, health2019Y_2, health2019Y_3)
+health2019Y <- health2019Y %>% group_by(요양개시일자) %>%
+  summarise(count = sum(count))
+
+write.csv(health2019Y, "G:/내 드라이브/Colab Notebooks/health2019Y.csv", row.names = FALSE)
+```
+
+
+
+## 노인
+```{r}
+# 노인 2018년_1
+
+health2018O_1 <- health_2018_1%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(13,14,15,16,17,18))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health2018O_1, "G:/내 드라이브/Colab Notebooks/health2018O_1.csv", row.names = FALSE)
+
+# 노인 2018년_2
+
+health2018O_2 <- health_2018_2%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(13,14,15,16,17,18))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+write.csv(health2018O_2, "G:/내 드라이브/Colab Notebooks/health2018O_2.csv", row.names = FALSE)
+
+# 노인 2018년_3
+
+# health2018O_3 = read.csv("G:/내 드라이브/Colab Notebooks/health2013Y_3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+
+# 노인 2019년_1
+health2019O_1 <- health_2019_1%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(13,14,15,16,17,18))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+# 노인 2019년_2
+health2019O_2 <- health_2019_2%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(13,14,15,16,17,18))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+# 노인 2019년_3
+health2019O_3 <- health_2019_3%>%
+  filter(시도코드==41)%>%
+  dplyr::filter(grepl('I|J', 주상병코드))%>% 
+  filter(연령대코드%in% c(13,14,15,16,17,18))%>% group_by(요양개시일자) %>%
+  summarise(count = n())
+
+
+health2019O = rbind(health2019O_1, health2019O_2, health2019O_3)
+health2019O <- health2019O %>% group_by(요양개시일자) %>%
+  summarise(count = sum(count))
+
+write.csv(health2019O, "G:/내 드라이브/Colab Notebooks/health2019O.csv", row.names = FALSE)
+```
+----------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------
+# health 2018
+
+```{r}
+health2018_1 = read.csv("G:/내 드라이브/Colab Notebooks/health2018_1.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2018_2 = read.csv("G:/내 드라이브/Colab Notebooks/health2018_2.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2018_3 = read.csv("G:/내 드라이브/Colab Notebooks/health2018_3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2018 <- rbind(health2018_1, health2018_2, health2018_3)
+health2018
+```
+
+```{r}
+health2018 <- health2018 %>% group_by(요양개시일자) %>%
+  summarise(count = sum(count))
+
+health2018
+
+write.csv(health2018, "G:/내 드라이브/Colab Notebooks/health2018.csv", row.names = FALSE, fileEncoding = "euc-kr")
+```
+
+
+# health 2019 
+
+```{r}
+health2019_1 = read.csv("G:/내 드라이브/Colab Notebooks/health2019_1.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2019_2 = read.csv("G:/내 드라이브/Colab Notebooks/health2019_2.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2019_3 = read.csv("G:/내 드라이브/Colab Notebooks/health2019_3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2019 <- rbind(health2019_1, health2019_2, health2019_3)
+health2019
+```
+
+```{r}
+health2019 <- health2019 %>% group_by(요양개시일자) %>%
+  summarise(count = sum(count))
+
+health2019
+
+write.csv(health2019, "G:/내 드라이브/Colab Notebooks/health2019.csv", row.names = FALSE, fileEncoding = "euc-kr")
+```
+
+# health 2020
+
+```{r}
+health2020_1 = read.csv("G:/내 드라이브/Colab Notebooks/health2020_1.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2020_2 = read.csv("G:/내 드라이브/Colab Notebooks/health2020_2.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+health2020_3 = read.csv("G:/내 드라이브/Colab Notebooks/health2020_3.csv", fileEncoding = "euc-kr", stringsAsFactors = TRUE)
+
+```
+
+```{r}
+health2020_1[,1] = gsub("-", "", health2020_1[,1])
+health2020_2[,1] = gsub("-", "", health2020_2[,1])
+health2020_3[,1] = gsub("-", "", health2020_3[,1])
+
+health2020 <- rbind(health2020_1, health2020_2, health2020_3)
+health2020
+```
+
+```{r}
+health2020 <- health2020 %>% group_by(요양개시일자) %>%
+  summarise(count = sum(count))
+
+health2020
+
+write.csv(health2020, "G:/내 드라이브/Colab Notebooks/health2020.csv", row.names = FALSE, fileEncoding = "euc-kr")
+```
+
+```{r}
+health = rbind(health2018, health2019, health2020)
+write.csv(health, "G:/내 드라이브/Colab Notebooks/health.csv", row.names = FALSE, fileEncoding = "euc-kr")
+```
+
