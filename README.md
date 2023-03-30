@@ -1,6 +1,6 @@
 ## 2022 Probono ICT Mentoring Project & ACK 2022
 
-upload project code & paper
+```upload project code & paper```
 
 A Smart city study trough development of new risk index based on GAM model and activity recommendation system for the vulnerable class of fine dust 
 
