@@ -1,7 +1,9 @@
 # 📈 2022 Probono ICT Mentoring Project
+<img src="https://img.shields.io/badge/Python-3776AB?style=plastic&logo=Python&logoColor=white">
+
+
 2022.04 ~ 2022.11
 
-<img src="https://img.shields.io/badge/Python-3776AB?style=plastic&logo=Python&logoColor=white">
 
 Welcome to Probono GitHub repository! I participated in the Probono ICT Mentoring Project 2022. Our team consisted of four mentees and our mentor, and we worked together to develop a new risk index based on the GAM model and an activity recommendation system for the vulnerable class of fine dust. Here, you can find information about our projects and access the code we have developed.
 
