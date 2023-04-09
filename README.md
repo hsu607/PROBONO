@@ -1,4 +1,4 @@
-# 2022 Probono ICT Mentoring Project & ACK 2022
+# 2022 Probono ICT Mentoring Project
 
 I participated in the Probono ICT Mentoring Project 2022. Our team consisted of four mentees and our mentor, and we worked together to develop a new risk index based on the GAM model and an activity recommendation system for the vulnerable class of fine dust.
 
