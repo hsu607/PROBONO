@@ -1,5 +1,5 @@
 # 📈 2022 Probono ICT Mentoring Project
-<img src="https://img.shields.io/badge/Python-3776AB?style=plastic&logo=Python&logoColor=white">
+<img src="https://img.shields.io/badge/Python-3776AB?style=plastic&logo=Python&logoColor=white"> <img src="https://img.shields.io/badge/R-276DC3?style=plastic&logo=R&logoColor=white">
 
 
 2022.04 ~ 2022.11
