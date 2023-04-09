@@ -9,7 +9,7 @@ Our project was conducted between April 2022 and November 2022 as part of the Pr
 Our research focused on analyzing fine dust levels in a smart city and identifying vulnerable populations that may be more affected by the adverse health effects of fine dust. We developed a new risk index based on the GAM model and used it to recommend activities that could reduce exposure to fine dust for the vulnerable class.
 
 ## Paper
-Our research findings were presented in a paper titled "A Smart city study trough development of new risk index based on GAM model and activity recommendation system for the vulnerable class of fine dust." The paper was published in the Proceedings of the Korea Information Processing Society Conference (2022), and the paper can be accessed through the following link: https://doi.org/10.3745/PKIPS.Y2022M11A.1009
+Our research findings were presented in a paper titled "A Smart city study trough development of new risk index based on GAM model and activity recommendation system for the vulnerable class of fine dust." The paper was published in the Proceedings of the Korea Information Processing Society Conference (2022), and you can find the paper in this repository. Also, the paper can be accessed through the following link: https://doi.org/10.3745/PKIPS.Y2022M11A.1009
 
 ## Award
 Top Prize, 2022 ACK 2022 ICT Mentoring, KIPS, Korea (Dec. 2022)
