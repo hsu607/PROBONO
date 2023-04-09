@@ -1,6 +1,5 @@
 # 2022 Probono ICT Mentoring Project
-
-I participated in the Probono ICT Mentoring Project 2022. Our team consisted of four mentees and our mentor, and we worked together to develop a new risk index based on the GAM model and an activity recommendation system for the vulnerable class of fine dust.
+Welcome to Probono GitHub repository! I participated in the Probono ICT Mentoring Project 2022. Our team consisted of four mentees and our mentor, and we worked together to develop a new risk index based on the GAM model and an activity recommendation system for the vulnerable class of fine dust. Here, you can find information about our projects and access the code we have developed.
 
 ## Project Timeline
 Our project was conducted between April 2022 and November 2022 as part of the Probono ICT Mentoring Project. During this time, we conducted research, analyzed data, developed models, and created a presentation for the 2022 ACK 2022 ICT Mentoring conference.
